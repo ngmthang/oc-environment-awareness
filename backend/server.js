@@ -217,10 +217,10 @@ app.post('/api/quiz/submit', requireSession, async (req, res) => {
 });
 
 // POST /logout
-app.post('/logout', (req, res) => {
+app.get('/logout', (req, res) => {
   req.session.destroy(() => {
     res.clearCookie('connect.sid');
-    res.json({ success: true });
+    res.redirect('/login.html');
   });
 });
 

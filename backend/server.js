@@ -108,13 +108,20 @@ function requireSession(req, res, next) {
 
 // ─── Routes ───────────────────────────────────────────────────────────────────
 
-// GET / → redirect to login or main
-app.get('/', (req, res) => {
-  if (req.session?.visitorId) {
-    res.redirect('/main.html');
-  } else {
+// POST /logout (from the form in main.html)
+app.post('/logout', (req, res) => {
+  req.session.destroy(() => {
+    res.clearCookie('connect.sid');
     res.redirect('/login.html');
-  }
+  });
+});
+
+// GET /logout (for direct URL access)
+app.get('/logout', (req, res) => {
+  req.session.destroy(() => {
+    res.clearCookie('connect.sid');
+    res.redirect('/login.html');
+  });
 });
 
 // POST /visitor/register

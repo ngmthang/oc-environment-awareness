@@ -1,5 +1,6 @@
 require('dotenv').config();
 
+const path = require('path');
 const express = require('express');
 const { Pool } = require('pg');
 const session = require('express-session');
@@ -224,7 +225,7 @@ app.post('/logout', (req, res) => {
 });
 
 // ─── Static files (your HTML/CSS/JS frontend) ────────────────────────────────
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Guard: /main.html requires session
 app.get('/main.html', (req, res, next) => {

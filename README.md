@@ -1,137 +1,128 @@
-# oc-environment-awareness
-
-This repository currently contains only this README file. If you intended to upload your project, ensure all source files are committed and pushed to this branch first.
-
-## Quick check before asking for migration help
-
-Run these locally and push any missing files:
-
-```bash
-git status
-git add .
-git commit -m "Add project files"
-git push origin <your-branch>
-```
-
-After pushing, your repo should include items like:
-
-- `package.json` for Node backend (or `pom.xml`/`build.gradle` if still Spring)
-- backend source files (for example `src/` or `backend/src/`)
-- frontend files (for example `index.html`, `assets/`, `css/`, `js/`)
-- SQL schema/migration files
-
-## Fastest deployment target (Option B)
-
-If you're moving to Node.js and want free/easy deployment:
-
-- **Frontend:** Cloudflare Pages
-- **Backend:** Render (Node.js web service)
-- **Database:** Supabase Postgres
-
-## Node backend baseline (what we can generate after files are present)
-
-```txt
-backend/
-  src/
-    server.js
-    app.js
-    routes/
-    controllers/
-    services/
-    db/
-  package.json
-  .env.example
-```
-
-Typical environment variables:
-
-```env
-PORT=10000
-DATABASE_URL=postgresql://...
-CORS_ORIGIN=https://your-frontend.pages.dev
-NODE_ENV=production
-```
-
-## Render config (example)
-
-- Build Command: `npm install`
-- Start Command: `npm run start`
-- Root Directory: `backend` (if backend is in subfolder)
-
-## Cloudflare Pages config (example)
-
-- Framework preset: none (for plain HTML/CSS/JS)
-- Build command: *(empty)*
-- Build output directory: `/`
-
-Then point frontend API calls to:
-
-```txt
-https://<your-render-service>.onrender.com
-```
-
-## How to test
-
-Use this order so you can quickly isolate issues.
-
-### 1) Test backend locally
-
-From your backend folder:
-
-```bash
-npm install
-npm run dev
-```
-
-If your project does not have `dev`, use:
-
-```bash
-npm start
-```
-
-Health check example (adjust route):
-
-```bash
-curl http://localhost:10000/health
-```
-
-Expected result: status `200` and simple JSON/text response.
-
-### 2) Test database connection locally
-
-With backend running, call one API endpoint that reads/writes DB:
-
-```bash
-curl http://localhost:10000/api/<your-endpoint>
-```
-
-If it fails, verify `DATABASE_URL` in `.env`.
-
-### 3) Test frontend locally
-
-If it is plain HTML/CSS/JS, open `index.html` directly or run a static server:
-
-```bash
-python3 -m http.server 5500
-```
-
-Open `http://localhost:5500` and confirm API calls target your local backend URL.
-
-### 4) Test after deployment
-
-- Open Render URL: `https://<your-render-service>.onrender.com/health`
-- Open Cloudflare Pages URL and test core flows (login, create/read/update/delete if available)
-- Confirm browser network tab shows successful API requests (2xx status)
-
-### 5) Quick smoke checklist
-
-- [ ] Backend starts with no crash
-- [ ] Health endpoint returns 200
-- [ ] One DB read works
-- [ ] One DB write works
-- [ ] Frontend loads without console errors
-- [ ] Frontend can call deployed backend URL
+# 🚀 Deployment Guide — Free Stack
+# Frontend: Netlify | Backend: Render | Database: Neon (PostgreSQL)
 
 ---
 
-Once the full source files are in this repo, migration can be done route-by-route from Spring controllers/services/entities into Express + Postgres equivalents.
+## 📁 Project Structure
+
+Your project should look like this:
+
+```
+your-project/
+├── backend/
+│   ├── server.js        ← Node.js backend (converted from Spring)
+│   ├── package.json
+│   ├── .env.example
+│   └── public/          ← PUT YOUR HTML/CSS/JS FILES HERE
+│       ├── login.html
+│       ├── main.html
+│       └── ... (css/, js/, images/)
+└── README.md
+```
+
+> ✅ Because the backend serves your static files from the `public/` folder,
+> you only need to deploy ONE thing (the backend on Render).
+> No need for a separate Netlify deployment!
+
+---
+
+## STEP 1 — Get a Free PostgreSQL Database (Neon)
+
+1. Go to **https://neon.tech** and sign up for free
+2. Create a new project (e.g. "ocenv")
+3. On the dashboard, click **"Connection string"** and copy the URL
+   - It looks like: `postgresql://alex:password@ep-xxx.us-east-2.aws.neon.tech/neondb?sslmode=require`
+4. Save this — you'll need it in Step 3
+
+---
+
+## STEP 2 — Push Your Code to GitHub
+
+1. Create a free account at **https://github.com**
+2. Create a new repository (e.g. "ocenv")
+3. Push your code:
+
+```bash
+cd your-project/backend
+git init
+git add .
+git commit -m "Initial commit"
+git branch -M main
+git remote add origin https://github.com/YOUR_USERNAME/ocenv.git
+git push -u origin main
+```
+
+---
+
+## STEP 3 — Deploy Backend on Render (Free)
+
+1. Go to **https://render.com** and sign up with GitHub
+2. Click **"New +"** → **"Web Service"**
+3. Connect your GitHub repo
+4. Fill in the settings:
+   - **Name:** ocenv-backend
+   - **Root Directory:** `backend` (if your repo has a backend folder)
+   - **Runtime:** Node
+   - **Build Command:** `npm install`
+   - **Start Command:** `npm start`
+   - **Instance Type:** Free
+5. Scroll down to **"Environment Variables"** and add:
+
+   | Key | Value |
+   |-----|-------|
+   | `DATABASE_URL` | (paste your Neon connection string) |
+   | `SESSION_SECRET` | (any long random string, e.g. `mysupers3cr3tkey123abc`) |
+   | `NODE_ENV` | `production` |
+
+6. Click **"Create Web Service"**
+7. Wait ~2 minutes for it to deploy
+8. Your site will be live at: `https://ocenv-backend.onrender.com`
+
+---
+
+## STEP 4 — Done! Test Your Site
+
+Visit your Render URL and test:
+- `https://your-app.onrender.com/` → should redirect to login.html
+- `https://your-app.onrender.com/login.html` → your login page
+- Register a visitor → should redirect to main.html
+
+---
+
+## ⚠️ Important Notes
+
+- **Free Render instances spin down after 15 min of inactivity** — first request after idle takes ~30 seconds to wake up. This is normal on the free tier.
+- **Neon free tier** gives you 0.5 GB storage and 1 project — more than enough.
+- **Sessions** are stored in PostgreSQL (the `session` table is auto-created), so they survive server restarts.
+
+---
+
+## 🔧 Updating Your Frontend API Calls
+
+If your frontend JS currently calls Spring endpoints like `/visitor/register` or `/api/dashboard`,
+**the URLs are exactly the same** in the new Node.js backend — no changes needed! ✅
+
+If you were using Spring's session cookie (`JSESSIONID`), the new backend uses `connect.sid` instead.
+Make sure your frontend fetch calls include `credentials: 'include'`:
+
+```javascript
+// Example: registering a visitor
+const res = await fetch('/visitor/register', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  credentials: 'include',   // ← important for sessions!
+  body: JSON.stringify({ name, occStudentId })
+});
+```
+
+---
+
+## 📋 All API Endpoints (unchanged from Spring)
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/` | Redirect to login or main |
+| POST | `/visitor/register` | Register visitor, create session |
+| GET | `/api/dashboard` | Get dashboard stats |
+| POST | `/api/quiz/submit` | Submit quiz score (requires session) |
+| POST | `/logout` | Destroy session |

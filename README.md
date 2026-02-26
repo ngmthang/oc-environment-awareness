@@ -1,5 +1,4 @@
 # oc-environment-awareness
-# oc-environment-awareness
 
 This repository currently contains only this README file. If you intended to upload your Spring project, ensure all project files are committed and pushed to this repo branch.
 

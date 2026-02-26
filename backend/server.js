@@ -240,6 +240,22 @@ app.get('/main.html', (req, res, next) => {
   next();
 });
 
+// POST /logout
+app.post('/logout', (req, res) => {
+  req.session.destroy(() => {
+    res.clearCookie('connect.sid');
+    res.redirect('/login.html');
+  });
+});
+
+// GET /logout
+app.get('/logout', (req, res) => {
+  req.session.destroy(() => {
+    res.clearCookie('connect.sid');
+    res.redirect('/login.html');
+  });
+});
+
 // ─── Start ────────────────────────────────────────────────────────────────────
 initDb().then(() => {
   app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

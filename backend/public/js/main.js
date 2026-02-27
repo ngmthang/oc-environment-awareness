@@ -582,3 +582,45 @@
         onScroll();
     });
 })();
+
+// ===== One-line nav scroll arrows =====
+(function initNavScrollArrows() {
+  const scroller = document.getElementById("nav-scroll");
+  if (scroller) scroller.scrollLeft = 0;
+  if (!scroller) return;
+
+  const leftBtn = document.querySelector(".nav-arrow--left");
+  const rightBtn = document.querySelector(".nav-arrow--right");
+  if (!leftBtn || !rightBtn) return;
+
+  const step = () => Math.max(220, Math.floor(scroller.clientWidth * 0.7));
+
+  function updateArrows() {
+    const maxScrollLeft = scroller.scrollWidth - scroller.clientWidth;
+    const atStart = scroller.scrollLeft <= 1;
+    const atEnd = scroller.scrollLeft >= maxScrollLeft - 1;
+
+    leftBtn.classList.toggle("is-hidden", atStart);
+    rightBtn.classList.toggle("is-hidden", atEnd);
+  }
+
+  leftBtn.addEventListener("click", () => {
+    scroller.scrollBy({ left: -step(), behavior: "smooth" });
+  });
+
+  rightBtn.addEventListener("click", () => {
+    scroller.scrollBy({ left: step(), behavior: "smooth" });
+  });
+
+  scroller.addEventListener("scroll", updateArrows, { passive: true });
+  window.addEventListener("resize", updateArrows);
+
+  // Optional: when a nav link is clicked, keep it visible
+  scroller.addEventListener("click", (e) => {
+    const a = e.target.closest("a");
+    if (!a) return;
+    a.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+  });
+
+  updateArrows();
+})();

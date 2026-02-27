@@ -9,6 +9,7 @@ const pgSession = require("connect-pg-simple")(session);
 const cors = require("cors");
 
 const app = express();
+app.get("/__health", (req, res) => res.status(200).send("ok"));
 const PORT = process.env.PORT || 3000;
 
 // ─── Database ────────────────────────────────────────────────────────────────

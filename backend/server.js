@@ -158,6 +158,21 @@ function requireSession(req, res, next) {
   next();
 }
 
+// ─── Helper: normalize + validate ───────────────────────────────────────────
+function normalizeOccId(raw) {
+  const v = String(raw ?? "").trim().toUpperCase();
+  return v.length ? v : "";
+}
+
+function normalizeName(raw) {
+  const v = String(raw ?? "").trim();
+  return v.length ? v : "Unknown";
+}
+
+function isValidOccId(v) {
+  return v.length === 0 || /^C\d{8}$/.test(v);
+}
+
 // ─── Routes ───────────────────────────────────────────────────────────────────
 
 // Logout (keep only once)
@@ -178,10 +193,10 @@ app.get("/logout", (req, res) => {
 // POST /visitor/register
 app.post("/visitor/register", async (req, res) => {
   try {
-    const name = (req.body.name || "").trim() || "Unknown";
-    const occId = (req.body.occStudentId || "").trim().toUpperCase();
+    const name = normalizeName(req.body.name);
+    const occId = normalizeOccId(req.body.occStudentId);
 
-    if (occId && !/^C\d{8}$/.test(occId)) {
+    if (!isValidOccId(occId)) {
       return res.status(400).json({ error: "Invalid OCC student id format" });
     }
 
@@ -219,6 +234,90 @@ app.post("/visitor/register", async (req, res) => {
 
     const snapshot = await buildDashboardSnapshot();
     res.json(snapshot);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+// GET /api/me
+app.get("/api/me", requireSession, async (req, res) => {
+  try {
+    const { rows } = await pool.query(
+      `SELECT id, name, occ_student_id, role, quiz_completed, quiz_best_score
+         FROM visitors
+        WHERE id = $1`,
+      [req.session.visitorId]
+    );
+    if (!rows.length) return res.status(404).json({ error: "Visitor not found" });
+    const v = rows[0];
+    res.json({
+      id: v.id,
+      name: v.name,
+      occStudentId: v.occ_student_id,
+      role: v.role,
+      quizCompleted: v.quiz_completed,
+      quizBestScore: v.quiz_best_score,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+// POST /api/me (update profile; student id optional)
+app.post("/api/me", requireSession, async (req, res) => {
+  try {
+    const name = normalizeName(req.body.name);
+    const occId = normalizeOccId(req.body.occStudentId);
+
+    if (!isValidOccId(occId)) {
+      return res.status(400).json({ error: "Invalid OCC student id format" });
+    }
+
+    if (occId) {
+      // Upsert by occ_student_id and switch session to that record
+      const role = "OCC_STUDENT";
+      const { rows } = await pool.query(
+        `INSERT INTO visitors (name, occ_student_id, role, first_seen, last_seen)
+         VALUES ($1, $2, $3, NOW(), NOW())
+         ON CONFLICT (occ_student_id) DO UPDATE
+           SET name = EXCLUDED.name,
+               role = EXCLUDED.role,
+               last_seen = NOW()
+         RETURNING id, name, occ_student_id, role, quiz_completed, quiz_best_score`,
+        [name, occId, role]
+      );
+      const v = rows[0];
+      req.session.visitorId = v.id;
+      return res.json({
+        id: v.id,
+        name: v.name,
+        occStudentId: v.occ_student_id,
+        role: v.role,
+        quizCompleted: v.quiz_completed,
+        quizBestScore: v.quiz_best_score,
+      });
+    }
+
+    const { rows } = await pool.query(
+      `UPDATE visitors
+          SET name = $1,
+              last_seen = NOW()
+        WHERE id = $2
+        RETURNING id, name, occ_student_id, role, quiz_completed, quiz_best_score`,
+      [name, req.session.visitorId]
+    );
+    if (!rows.length) return res.status(404).json({ error: "Visitor not found" });
+    const v = rows[0];
+    res.json({
+      id: v.id,
+      name: v.name,
+      occStudentId: v.occ_student_id,
+      role: v.role,
+      quizCompleted: v.quiz_completed,
+      quizBestScore: v.quiz_best_score,
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Server error" });

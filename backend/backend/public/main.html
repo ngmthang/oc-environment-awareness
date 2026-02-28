@@ -1,0 +1,735 @@
+<!-- main.html (redesigned hero + cleaner structure; keeps all existing IDs/classes your JS uses) -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Orange County Environmental Awareness</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+<a href="#main-content" class="skip-to-content">Skip to main content</a>
+<div id="scroll-progress" aria-hidden="true"></div>
+
+<header class="hero">
+  <div class="container hero__inner">
+    <div class="hero__grid">
+      <div class="hero__copy">
+        <div class="hero__badge">Orange County, California</div>
+        <h1>Orange County Environmental Awareness</h1>
+        <p class="hero__lead">
+          A local learning hub that turns government and public-agency reports into clear takeaways about Orange County’s environment.
+          Explore what’s improving, what’s at risk, and the specific actions—by residents, schools,
+          and local agencies—that make the biggest difference.
+        </p>
+
+        <div class="hero__cta">
+          <a class="btn" href="#status">Explore the snapshot</a>
+          <a class="btn btn-ghost" href="#quiz">Take the quiz</a>
+
+          <form method="post" action="/logout" class="hero__logout">
+            <button type="submit" class="btn btn-ghost">Logout</button>
+          </form>
+        </div>
+
+        <div class="hero__meta">
+          <span class="hero__chip">Cited facts</span>
+          <span class="hero__chip">Local agencies</span>
+          <span class="hero__chip">Climate context</span>
+        </div>
+      </div>
+
+      <aside class="hero__kpis" aria-label="Quick facts">
+        <div class="kpi">
+          <div class="kpi__value">140</div>
+          <div class="kpi__label">Coastal monitoring locations</div>
+          <div class="kpi__note"><a href="#src-1">Source [1]</a></div>
+        </div>
+
+        <div class="kpi">
+          <div class="kpi__value">101,051</div>
+          <div class="kpi__label">Acre-feet recycled water (2024)</div>
+          <div class="kpi__note"><a href="#src-2">Source [2]</a></div>
+        </div>
+
+        <div class="kpi">
+          <div class="kpi__value">+50%</div>
+          <div class="kpi__label">Channel capacity increase</div>
+          <div class="kpi__note"><a href="#src-4">Source [4]</a></div>
+        </div>
+
+        <div class="hero__mini">
+          <div class="hero__mini-title">How to use this page</div>
+          <ul class="hero__mini-list">
+            <li>Scan sections using the sticky nav.</li>
+            <li>Tap images to open fullscreen.</li>
+            <li>Use source links for verification.</li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <nav class="site-nav" aria-label="Primary">
+  <div class="nav-shell container">
+    <button class="nav-arrow nav-arrow--left" type="button" aria-label="Scroll menu left">‹</button>
+
+    <div class="nav-scroll" id="nav-scroll" tabindex="0" aria-label="Section menu">
+        <ul class="nav-list nav-list--row" id="nav-list" role="tablist" aria-label="Sections">
+            <li><a href="#status" data-tab="status" role="tab" class="active"
+                title="Local Environment Snapshot" aria-label="Local Environment Snapshot">Snapshot</a></li>
+
+            <li><a href="#water-quality" data-tab="water-quality" role="tab"
+                title="Beaches, Harbors, and Water Quality" aria-label="Beaches, Harbors, and Water Quality">Coast</a></li>
+
+            <li><a href="#water-supply" data-tab="water-supply" role="tab"
+                title="Water Supply, Groundwater, and Recycling" aria-label="Water Supply, Groundwater, and Recycling">Water Supply</a></li>
+
+            <li><a href="#flood-coast" data-tab="flood-coast" role="tab"
+                title="Flood Control and Beach Protection" aria-label="Flood Control and Beach Protection">Flood</a></li>
+
+            <li><a href="#climate-context" data-tab="climate-context" role="tab"
+                title="Climate Context and Drivers" aria-label="Climate Context and Drivers">Climate</a></li>
+
+            <li><a href="#health" data-tab="health" role="tab"
+                title="Human Health and Climate Risks" aria-label="Human Health and Climate Risks">Health</a></li>
+
+            <li><a href="#nature" data-tab="nature" role="tab"
+                title="Vegetation, Wildlife, and Ecosystems" aria-label="Vegetation, Wildlife, and Ecosystems">Nature</a></li>
+
+            <li><a href="#tribal" data-tab="tribal" role="tab"
+                title="Tribal Knowledge and Cultural Burning" aria-label="Tribal Knowledge and Cultural Burning">Tribal</a></li>
+
+            <li><a href="#what-to-do" data-tab="what-to-do" role="tab"
+                title="What We Need To Do Next" aria-label="What We Need To Do Next">Actions</a></li>
+
+            <li><a href="#organizations" data-tab="organizations" role="tab"
+                title="Organizations To Know" aria-label="Organizations To Know">Organizations</a></li>
+
+            <li><a href="#quiz" data-tab="quiz" role="tab"
+                title="Quick Quiz" aria-label="Quick Quiz">Quiz</a></li>
+        </ul>
+    </div>
+
+    <button class="nav-arrow nav-arrow--right" type="button" aria-label="Scroll menu right">›</button>
+  </div>
+</nav>
+</header>
+
+<main id="main-content" class="container content">
+
+  <section class="visit-dashboard reveal" aria-label="Visit dashboard" aria-live="polite">
+    <div class="visit-dashboard__title">Visit Dashboard</div>
+
+    <div class="visit-dashboard__subtitle">All time</div>
+    <div class="visit-dashboard__cards">
+      <div class="visit-dashboard__card">
+        <div class="visit-dashboard__label">Total visits</div>
+        <div class="visit-dashboard__value" id="dash-total-visits">—</div>
+      </div>
+      <div class="visit-dashboard__card">
+        <div class="visit-dashboard__label">Total visitors</div>
+        <div class="visit-dashboard__value" id="dash-total-visitors">—</div>
+      </div>
+      <div class="visit-dashboard__card">
+        <div class="visit-dashboard__label">Guests</div>
+        <div class="visit-dashboard__value" id="dash-total-guests">—</div>
+      </div>
+      <div class="visit-dashboard__card">
+        <div class="visit-dashboard__label">OCC students</div>
+        <div class="visit-dashboard__value" id="dash-total-occ">—</div>
+      </div>
+      <div class="visit-dashboard__card">
+        <div class="visit-dashboard__label">Perfect quiz (10/10)</div>
+        <div class="visit-dashboard__value" id="dash-total-perfect">—</div>
+      </div>
+    </div>
+
+    <div class="visit-dashboard__subtitle">Today</div>
+    <div class="visit-dashboard__cards">
+      <div class="visit-dashboard__card">
+        <div class="visit-dashboard__label">Today visits</div>
+        <div class="visit-dashboard__value" id="dash-today-visits">—</div>
+      </div>
+      <div class="visit-dashboard__card">
+        <div class="visit-dashboard__label">Today visitors</div>
+        <div class="visit-dashboard__value" id="dash-today-visitors">—</div>
+      </div>
+      <div class="visit-dashboard__card">
+        <div class="visit-dashboard__label">Guests (today)</div>
+        <div class="visit-dashboard__value" id="dash-today-guests">—</div>
+      </div>
+      <div class="visit-dashboard__card">
+        <div class="visit-dashboard__label">OCC students (today)</div>
+        <div class="visit-dashboard__value" id="dash-today-occ">—</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="status" data-tab-panel="status" class="panel is-active">
+    <h2>Local Environment Snapshot</h2>
+
+    <img
+      src="images/Beaches%2C%20Harbors%2C%20and%20Water%20Quality.jpeg"
+      alt="Map of ocean water monitoring stations in Orange County showing 140 total sample station locations"
+      class="section-image"
+      loading="lazy"
+    />
+    <p class="image-caption">Map of ocean water monitoring stations in Orange County (140 total locations).</p>
+
+    <h3>Key indicators (Orange County)</h3>
+    <ol class="list-cards">
+      <li class="stat-item">
+        Coastal monitoring footprint: Orange County agencies collectively sample along
+        <strong>42 miles of open coastline</strong> and <strong>70 miles of harbor and bay frontage</strong>,
+        with <strong>140 monitoring stations</strong> and weekly sampling collaboration across agencies.
+        <sup><a href="#src-1">[1]</a></sup>
+      </li>
+      <li class="stat-item">
+        Annual monitoring scale: approximately <strong>7,500 water samples</strong> and
+        <strong>22,500 laboratory analyses</strong> were performed in the most recent reporting year described in the report.
+        <sup><a href="#src-1">[1]</a></sup>
+      </li>
+      <li class="stat-item">
+        Water resilience via recycling: in 2024 the Groundwater Replenishment System produced
+        <strong>101,051 acre-feet</strong> of purified recycled water; the facility was on-line
+        about <strong>98.15% of the year</strong> and reported <strong>no emergency discharges</strong> to the Santa Ana River that year.
+        <sup><a href="#src-2">[2]</a></sup>
+      </li>
+      <li class="stat-item">
+        Water resources monthly accounting (December 2025): year-to-date total groundwater recharge
+        <strong>128,266 acre-feet</strong>, groundwater production <strong>150,247 acre-feet</strong>, accumulated overdraft
+        <strong>204,985 acre-feet</strong> (preliminary).
+        <sup><a href="#src-3">[3]</a></sup>
+      </li>
+      <li class="stat-item">
+        Flood control capacity modernization: the East Garden Grove–Wintersburg Channel Improvement Project redesign increased channel capacity by
+        <strong>50%</strong>.
+        <sup><a href="#src-4">[4]</a></sup>
+      </li>
+    </ol>
+
+    <h3>How to read this site</h3>
+    <ul class="info-box">
+      <li>Orange County operational facts come from Orange County public-agency reports.</li>
+      <li>Climate context comes from statewide indicator reports to explain changing risks.</li>
+      <li>Each statistic includes a numbered source reference.</li>
+    </ul>
+  </section>
+
+  <section id="water-quality" class="panel reveal">
+    <h2>Beaches, Harbors, and Water Quality</h2>
+
+    <img
+      src="images/Beaches%2C%20Harbors%2C%20and%20Water%20Quality.jpeg"
+      alt="Ocean water monitoring stations map showing coverage along the Orange County coastline"
+      class="section-image"
+      loading="lazy"
+    />
+    <p class="image-caption">Monitoring network for beaches, harbors, and bays (map shown in the Orange County report).</p>
+
+    <h3 class="block-good-title">What we are doing well</h3>
+    <ul class="list-cards block-good">
+      <li>
+        Structured monitoring and notification: when bacteriological standards are exceeded, the public is notified, signs are posted,
+        and monitoring can increase; the report describes use of Beach Mile Days.
+        <sup><a href="#src-1">[1]</a></sup>
+      </li>
+      <li>
+        Continuous response capacity: water quality staff are on-call 24 hours a day, 7 days a week for sewage or contamination incidents,
+        with public information channels described in the report.
+        <sup><a href="#src-1">[1]</a></sup>
+      </li>
+    </ul>
+
+    <h3 class="block-danger-title">What the dangers are</h3>
+    <ul class="list-cards block-danger">
+      <li>
+        Sewage spills: wastewater overflows can threaten waterways and beaches; untreated sewage is described as containing high levels of disease-causing bacteria and viruses.
+        <sup><a href="#src-1">[1]</a></sup>
+      </li>
+    </ul>
+
+    <h3 class="block-edu-title">Education: how beach postings work</h3>
+    <ol class="list-cards">
+      <li>Weekly sampling is performed at monitoring stations by multiple public agencies. <sup><a href="#src-1">[1]</a></sup></li>
+      <li>Exceedances trigger postings and potentially increased monitoring; Beach Mile Days compare extent and duration. <sup><a href="#src-1">[1]</a></sup></li>
+      <li>Public updates are provided through the report’s described channels. <sup><a href="#src-1">[1]</a></sup></li>
+    </ol>
+  </section>
+
+  <section id="water-supply" class="panel reveal">
+    <h2>Water Supply, Groundwater, and Recycling</h2>
+
+    <img
+      src="images/Water%20Supply%2C%20Groundwater%2C%20and%20Recycling.png"
+      alt="Map showing groundwater replenishment system facilities, pipelines, recharge basins, and intrusion barriers"
+      class="section-image"
+      loading="lazy"
+    />
+    <p class="image-caption">Groundwater replenishment system map showing major infrastructure for recycling, recharge, and intrusion protection.</p>
+
+    <h3 class="block-good-title">What we are doing well</h3>
+    <ul class="list-cards block-good">
+      <li>
+        Advanced water recycling: full advanced treatment (membrane filtration, reverse osmosis, ultraviolet light with advanced oxidation/disinfection)
+        and delivery to recharge and injection components described in the report.
+        <sup><a href="#src-2">[2]</a></sup>
+      </li>
+      <li>
+        Operational reliability: the Advanced Water Purification Facility was on-line approximately <strong>359.2 days</strong> in 2024
+        (<strong>98.15%</strong> of the year).
+        <sup><a href="#src-2">[2]</a></sup>
+      </li>
+      <li>
+        Volume delivered: 2024 purified recycled water production reported as <strong>101,051 acre-feet</strong>.
+        <sup><a href="#src-2">[2]</a></sup>
+      </li>
+      <li>
+        Emergency discharge avoidance: the report states there were <strong>no emergency discharges</strong> to the Santa Ana River in 2024.
+        <sup><a href="#src-2">[2]</a></sup>
+      </li>
+    </ul>
+
+    <h3 class="block-danger-title">What the dangers are</h3>
+    <ul class="list-cards block-danger">
+      <li>
+        Basin overdraft tracking: the monthly water resources summary reports an accumulated overdraft of <strong>204,985 acre-feet</strong> (preliminary).
+        <sup><a href="#src-3">[3]</a></sup>
+      </li>
+    </ul>
+
+    <h3 class="block-actions-title">What we need to do next (water)</h3>
+    <ol class="list-cards">
+      <li>Expand drought-resilient supplies through recycling and recharge systems described in the annual report. <sup><a href="#src-2">[2]</a></sup></li>
+      <li>Use basin accounting (recharge, production, storage change) to guide long-term sustainability decisions. <sup><a href="#src-3">[3]</a></sup></li>
+    </ol>
+  </section>
+
+  <section id="flood-coast" class="panel reveal">
+    <h2>Flood Control and Beach Protection</h2>
+
+    <div class="image-grid">
+      <img
+        src="images/Flood%20Control%20and%20Beach%20Protection%201.jpeg"
+        alt="East Garden Grove–Wintersburg Channel improvements project showing existing versus completed project"
+        loading="lazy"
+      />
+      <img
+        src="images/Flood%20Control%20and%20Beach%20Protection%202.jpeg"
+        alt="Edwards Street Bridge improvements showing existing versus completed project"
+        loading="lazy"
+      />
+    </div>
+    <p class="image-caption">Channel improvements project visuals showing how capacity and protection were increased.</p>
+
+    <h3 class="block-good-title">What we are doing well</h3>
+    <ul class="list-cards block-good">
+      <li>
+        Stormwater capacity upgrades: the channel project increased capacity by <strong>50%</strong>.
+        <sup><a href="#src-4">[4]</a></sup>
+      </li>
+      <li>
+        Beach erosion response: transport of approximately <strong>132,000 cubic yards of sand</strong> to restore specific beach areas.
+        <sup><a href="#src-5">[5]</a></sup>
+      </li>
+      <li>
+        Infrastructure-scale maintenance: removal of approximately <strong>357,000 cubic yards</strong> of trash and debris from county roads and flood control channels.
+        <sup><a href="#src-5">[5]</a></sup>
+      </li>
+    </ul>
+
+    <h3 class="block-danger-title">What the dangers are</h3>
+    <ul class="list-cards block-danger">
+      <li>
+        Remaining floodplains: the report describes ongoing future improvements needed to reduce remaining floodplain risk.
+        <sup><a href="#src-4">[4]</a></sup>
+      </li>
+    </ul>
+  </section>
+
+  <section id="climate-context" class="panel reveal">
+    <h2>Climate Context and Drivers</h2>
+
+    <div class="image-grid">
+      <img
+        src="images/Climate%20Context%20and%20Drivers%201.jpg"
+        alt="Map of vertical land motion rates across California showing uplift and subsidence patterns"
+        loading="lazy"
+      />
+      <img
+        src="images/Climate%20Context%20and%20Drivers%202.jpeg"
+        alt="Chart showing historical sea level rise and future sea level scenarios for adaptation planning"
+        loading="lazy"
+      />
+      <img
+        src="images/Climate%20Context%20and%20Drivers%205.jpeg"
+        alt="Map showing coastal flooding extent example with sea level rise scenario"
+        loading="lazy"
+      />
+    </div>
+    <p class="image-caption">Climate context figures used to explain coastal risk and planning assumptions.</p>
+
+    <p>
+      This section provides statewide indicator context that explains why Orange County faces increasing stress from sea level rise,
+      heat, and shifting water availability.
+    </p>
+
+    <h3>Physical changes that matter for Orange County</h3>
+    <ol class="list-cards">
+      <li class="stat-item">
+        Sea level rise: described as increasing by about <strong>200 millimeters (8 inches)</strong> over the past century at example stations,
+        with year-to-year variability and elevated levels during El Niño years.
+        <sup><a href="#src-6">[6]</a></sup>
+      </li>
+      <li class="stat-item">
+        Snow-water content variability: record low <strong>5% of average in 2015</strong> and <strong>35% of average in 2022</strong>.
+        <sup><a href="#src-7">[7]</a></sup>
+      </li>
+      <li class="stat-item">
+        Snowmelt timing shifts: earlier shifts in snowmelt; past warming linked to increased early season runoff in the Sierra Nevada by about <strong>30%</strong>.
+        <sup><a href="#src-8">[8]</a></sup>
+      </li>
+    </ol>
+
+    <div class="image-grid">
+      <img
+        src="images/Climate%20Context%20and%20Drivers%204.jpeg"
+        alt="Diagram showing water yield from snow volume and liquid equivalent concept"
+        loading="lazy"
+      />
+      <img
+        src="images/Climate%20Context%20and%20Drivers%203.jpeg"
+        alt="Snow Water Equivalent diagram showing current conditions versus historical ranges"
+        loading="lazy"
+      />
+    </div>
+    <p class="image-caption">Snowpack concepts and measurements help explain water supply risk.</p>
+  </section>
+
+  <section id="health" class="panel reveal">
+    <h2>Human Health and Climate Risks</h2>
+
+    <div class="image-grid">
+      <img
+        src="images/Human%20Health%20and%20Climate%20Risks.png"
+        alt="Infographic showing major pathways of climate change impacts on human health"
+        loading="lazy"
+      />
+      <img
+        src="images/Human%20Health%20and%20Climate%20Risks%203.jpeg"
+        alt="Diagram showing climate change indicators, impacts, and responses in the Southwest"
+        loading="lazy"
+      />
+    </div>
+    <p class="image-caption">Health impacts include extreme heat, smoke, air pollution, vector ecology, and water quality impacts.</p>
+
+    <p>
+      This section uses California health indicators to explain risk pathways relevant to Orange County:
+      heat, smoke, air pollution, infectious disease, and climate-sensitive exposures.
+    </p>
+
+    <h3>Risk pathways</h3>
+    <ul class="list-cards">
+      <li>
+        Coastal contamination: bacteriological exceedances can trigger postings and advisories described in the Orange County report.
+        <sup><a href="#src-1">[1]</a></sup>
+      </li>
+      <li>
+        Heat and extreme events: statewide indicators include discussions of heat-related health burdens and climate-related exposures.
+        <sup><a href="#src-9">[9]</a></sup>
+      </li>
+    </ul>
+
+    <img
+      src="images/Human%20Health%20and%20Climate%20Risks.jpeg"
+      alt="Circular diagram showing multiple categories of climate change impacts on human health"
+      class="section-image"
+      loading="lazy"
+    />
+    <p class="image-caption">Health impact categories mapped across environmental and social pathways.</p>
+  </section>
+
+  <section id="nature" class="panel reveal">
+    <h2>Vegetation, Wildlife, and Ecosystems</h2>
+
+    <div class="image-grid">
+      <img
+        src="images/Vegetation%2C%20Wildlife%2C%20and%20Ecosystems.jpeg"
+        alt="Graphic illustrating marine ecosystem protection and pollution prevention framing"
+        loading="lazy"
+      />
+      <img
+        src="images/turningtidesposter.jpg"
+        alt="Poster: Turning the Tide, California's Underwater Parks"
+        loading="lazy"
+      />
+    </div>
+    <p class="image-caption">Coastal ecosystems and marine protected areas are part of long-term biodiversity protection.</p>
+
+    <h3>Local relevance</h3>
+    <ul class="list-cards">
+      <li>
+        Marine ecosystem sensitivity: coastal ocean temperature and sea level context support understanding of habitat stressors.
+        <sup><a href="#src-6">[6]</a></sup>
+      </li>
+      <li>
+        Pollution impact reduction: coastal water protection reduces contamination exposure pressures on wildlife and people.
+        <sup><a href="#src-1">[1]</a></sup>
+      </li>
+    </ul>
+
+    <img
+      src="images/Vegetation%2C%20Wildlife%2C%20and%20Ecosystems.png"
+      alt="Graphic showing the flow of pollutants from sources through pathways to sinks and interventions at multiple points"
+      class="section-image"
+      loading="lazy"
+    />
+    <p class="image-caption">Pollution prevention framework: interventions at the source, along pathways, and at sinks.</p>
+  </section>
+
+  <section id="tribal" class="panel reveal">
+    <h2>Tribal Knowledge and Cultural Burning</h2>
+
+    <div class="image-grid">
+      <img
+        src="images/Tribal%20Knowledge%20and%20Cultural%20Burning%201.jpg"
+        alt="Diagram showing wildlife recovery and population responses after fire events over time"
+        loading="lazy"
+      />
+      <img
+        src="images/Tribal%20Knowledge%20and%20Cultural%20Burning.png"
+        alt="Graphic showing post-fire ecological recovery and species traits affecting resilience"
+        loading="lazy"
+      />
+    </div>
+    <p class="image-caption">Fire ecology concepts used to explain cultural burning, habitat recovery, and long-term resilience.</p>
+
+    <p>
+      This section summarizes a tribal indicator narrative included in statewide climate indicator materials.
+      It is included for education on how land stewardship, fire, and cultural practices relate to climate adaptation.
+    </p>
+
+    <h3>Key points from the tribal indicator narrative</h3>
+    <ul class="list-cards">
+      <li>
+        Narrative describes how climate impacts interact with stressors such as water diversions and fire suppression,
+        and discusses renewed recognition of indigenous burning as an ecosystem component and restoration technique.
+        <sup><a href="#src-10">[10]</a></sup>
+      </li>
+    </ul>
+  </section>
+
+  <section id="what-to-do" class="panel reveal">
+    <h2>What We Need To Do Next</h2>
+
+    <img
+      src="images/Screenshot_19-2-2026_18105_opensnow.com.jpeg"
+      alt="Snow Water Equivalent percent of normal map used for public communication of snowpack conditions"
+      class="section-image"
+      loading="lazy"
+    />
+    <p class="image-caption">Snowpack monitoring is used to communicate water supply risk signals across the western United States.</p>
+
+    <h3 class="block-actions-title">Priority actions (built from the risks described in the reports)</h3>
+    <ol class="list-cards">
+      <li>
+        Maintain coastal water monitoring, rapid response, and public notification systems, because postings and advisories are frontline tools for protecting public health.
+        <sup><a href="#src-1">[1]</a></sup>
+      </li>
+      <li>
+        Expand drought-resilient water supply through advanced recycling and recharge while maintaining performance and compliance.
+        <sup><a href="#src-2">[2]</a></sup>
+      </li>
+      <li>
+        Continue channel modernization that increases capacity and reduces floodplain exposure.
+        <sup><a href="#src-4">[4]</a></sup>
+      </li>
+      <li>
+        Reduce debris entering waterways; reported removal volumes reflect ongoing upstream pressures.
+        <sup><a href="#src-5">[5]</a></sup>
+      </li>
+      <li>
+        Plan for coastal impacts as sea level continues rising and can be amplified during El Niño years.
+        <sup><a href="#src-6">[6]</a></sup>
+      </li>
+    </ol>
+  </section>
+
+  <section id="organizations" class="panel reveal">
+    <h2>Organizations To Know</h2>
+
+    <img
+      src="images/Water%20Supply%2C%20Groundwater%2C%20and%20Recycling.png"
+      alt="Map illustrating agency-scale infrastructure used for water recycling and groundwater protection"
+      class="section-image"
+      loading="lazy"
+    />
+    <p class="image-caption">Agencies collaborate across water quality monitoring, groundwater reliability, and flood control.</p>
+
+    <ul class="list-cards">
+      <li>
+        Orange County Health Care Agency (Environmental Health Water Quality Team): coastal water monitoring, postings, and public notification systems.
+        <sup><a href="#src-1">[1]</a></sup>
+      </li>
+      <li>
+        Orange County Water District and Orange County Sanitation District: joint sponsors of the groundwater replenishment system described in the annual report.
+        <sup><a href="#src-2">[2]</a></sup>
+      </li>
+      <li>
+        Orange County Public Works: flood control projects, channel upgrades, beach erosion sand placement, and debris removal described in the State of the Department report.
+        <sup><a href="#src-4">[4]</a></sup>
+      </li>
+    </ul>
+  </section>
+
+  <section id="quiz" class="panel reveal">
+    <h2>Quick Quiz</h2>
+    <p class="muted">10 questions. Instant feedback. Score shown at the end.</p>
+
+    <form id="quiz-form" class="quiz" novalidate>
+      <ol class="quiz-list">
+
+        <li class="quiz-q" data-answer="b">
+          <div class="quiz-q__title">1) How many monitoring stations are described for Orange County coastal sampling?</div>
+          <label class="quiz-opt"><input type="radio" name="q1" value="a"> 70</label>
+          <label class="quiz-opt"><input type="radio" name="q1" value="b"> 140</label>
+          <label class="quiz-opt"><input type="radio" name="q1" value="c"> 42</label>
+          <label class="quiz-opt"><input type="radio" name="q1" value="d"> 7,500</label>
+          <div class="quiz-exp" hidden>Answer: 140 monitoring stations.</div>
+        </li>
+
+        <li class="quiz-q" data-answer="c">
+          <div class="quiz-q__title">2) Approximately how many water samples per year were performed in the reporting year described?</div>
+          <label class="quiz-opt"><input type="radio" name="q2" value="a"> 22,500</label>
+          <label class="quiz-opt"><input type="radio" name="q2" value="b"> 101,051</label>
+          <label class="quiz-opt"><input type="radio" name="q2" value="c"> 7,500</label>
+          <label class="quiz-opt"><input type="radio" name="q2" value="d"> 132,000</label>
+          <div class="quiz-exp" hidden>Answer: ~7,500 water samples.</div>
+        </li>
+
+        <li class="quiz-q" data-answer="a">
+          <div class="quiz-q__title">3) What typically triggers beach postings/advisories in the monitoring program?</div>
+          <label class="quiz-opt"><input type="radio" name="q3" value="a"> Bacteriological standards are exceeded</label>
+          <label class="quiz-opt"><input type="radio" name="q3" value="b"> High tide only</label>
+          <label class="quiz-opt"><input type="radio" name="q3" value="c"> Temperature drops below 60°F</label>
+          <label class="quiz-opt"><input type="radio" name="q3" value="d"> Sand placement projects end</label>
+          <div class="quiz-exp" hidden>Answer: Exceeding bacteriological standards triggers actions (postings/increased monitoring).</div>
+        </li>
+
+        <li class="quiz-q" data-answer="d">
+          <div class="quiz-q__title">4) The Groundwater Replenishment System (2024) produced about how much purified recycled water?</div>
+          <label class="quiz-opt"><input type="radio" name="q4" value="a"> 128,266 acre-feet</label>
+          <label class="quiz-opt"><input type="radio" name="q4" value="b"> 150,247 acre-feet</label>
+          <label class="quiz-opt"><input type="radio" name="q4" value="c"> 204,985 acre-feet</label>
+          <label class="quiz-opt"><input type="radio" name="q4" value="d"> 101,051 acre-feet</label>
+          <div class="quiz-exp" hidden>Answer: 101,051 acre-feet.</div>
+        </li>
+
+        <li class="quiz-q" data-answer="b">
+          <div class="quiz-q__title">5) In 2024, how much of the year was the Advanced Water Purification Facility on-line?</div>
+          <label class="quiz-opt"><input type="radio" name="q5" value="a"> 50%</label>
+          <label class="quiz-opt"><input type="radio" name="q5" value="b"> About 98.15%</label>
+          <label class="quiz-opt"><input type="radio" name="q5" value="c"> About 35%</label>
+          <label class="quiz-opt"><input type="radio" name="q5" value="d"> About 8%</label>
+          <div class="quiz-exp" hidden>Answer: About 98.15% of the year.</div>
+        </li>
+
+        <li class="quiz-q" data-answer="c">
+          <div class="quiz-q__title">6) The East Garden Grove–Wintersburg Channel Improvement Project increased channel capacity by:</div>
+          <label class="quiz-opt"><input type="radio" name="q6" value="a"> 8%</label>
+          <label class="quiz-opt"><input type="radio" name="q6" value="b"> 35%</label>
+          <label class="quiz-opt"><input type="radio" name="q6" value="c"> 50%</label>
+          <label class="quiz-opt"><input type="radio" name="q6" value="d"> 98%</label>
+          <div class="quiz-exp" hidden>Answer: 50% increase in capacity.</div>
+        </li>
+
+        <li class="quiz-q" data-answer="a">
+          <div class="quiz-q__title">7) The site notes Orange County agencies sample approximately how many miles of open coastline?</div>
+          <label class="quiz-opt"><input type="radio" name="q7" value="a"> 42 miles</label>
+          <label class="quiz-opt"><input type="radio" name="q7" value="b"> 70 miles</label>
+          <label class="quiz-opt"><input type="radio" name="q7" value="c"> 140 miles</label>
+          <label class="quiz-opt"><input type="radio" name="q7" value="d"> 359.2 miles</label>
+          <div class="quiz-exp" hidden>Answer: 42 miles of open coastline (and 70 miles of harbor/bay frontage).</div>
+        </li>
+
+        <li class="quiz-q" data-answer="d">
+          <div class="quiz-q__title">8) One stated danger to water quality in the content is:</div>
+          <label class="quiz-opt"><input type="radio" name="q8" value="a"> Snowmelt timing shifts</label>
+          <label class="quiz-opt"><input type="radio" name="q8" value="b"> El Niño years</label>
+          <label class="quiz-opt"><input type="radio" name="q8" value="c"> Vertical land motion</label>
+          <label class="quiz-opt"><input type="radio" name="q8" value="d"> Sewage spills / wastewater overflows</label>
+          <div class="quiz-exp" hidden>Answer: Sewage spills / wastewater overflows.</div>
+        </li>
+
+        <li class="quiz-q" data-answer="b">
+          <div class="quiz-q__title">9) In the climate context, the page mentions sea level rise as about how much over the past century at example stations?</div>
+          <label class="quiz-opt"><input type="radio" name="q9" value="a"> 30% (runoff)</label>
+          <label class="quiz-opt"><input type="radio" name="q9" value="b"> ~200 mm (about 8 inches)</label>
+          <label class="quiz-opt"><input type="radio" name="q9" value="c"> 204,985 acre-feet</label>
+          <label class="quiz-opt"><input type="radio" name="q9" value="d"> 132,000 cubic yards</label>
+          <div class="quiz-exp" hidden>Answer: ~200 millimeters (about 8 inches).</div>
+        </li>
+
+        <li class="quiz-q" data-answer="c">
+          <div class="quiz-q__title">10) Which is listed as an organization to know for coastal water monitoring/postings?</div>
+          <label class="quiz-opt"><input type="radio" name="q10" value="a"> Orange County Transportation Authority</label>
+          <label class="quiz-opt"><input type="radio" name="q10" value="b"> California DMV</label>
+          <label class="quiz-opt"><input type="radio" name="q10" value="c"> Orange County Health Care Agency (Environmental Health Water Quality Team)</label>
+          <label class="quiz-opt"><input type="radio" name="q10" value="d"> NOAA Fisheries only</label>
+          <div class="quiz-exp" hidden>Answer: Orange County Health Care Agency (Environmental Health Water Quality Team).</div>
+        </li>
+
+      </ol>
+
+      <div class="quiz-actions">
+        <button type="button" class="btn" id="quiz-submit">Check answers</button>
+        <button type="button" class="btn btn-ghost" id="quiz-reset">Reset</button>
+        <div class="quiz-score" id="quiz-score" aria-live="polite"></div>
+      </div>
+    </form>
+  </section>
+
+  <section id="sources" class="panel reveal">
+    <h2>Sources</h2>
+
+    <ol class="sources">
+      <li id="src-1">Orange County Ocean, Harbor and Bay Water Quality Report 2023–2024.</li>
+      <li id="src-2">2024 Groundwater Replenishment System Annual Report.</li>
+      <li id="src-3">Orange County Water District Water Resources Summary (December 2025).</li>
+      <li id="src-4">Orange County Public Works State of the Department 2022–2024 (channel improvements).</li>
+      <li id="src-5">Orange County Public Works State of the Department 2022–2024 (sand placement; debris removal).</li>
+      <li id="src-6">Indicators of Climate Change in California (2022) – Physical Systems (sea level rise context).</li>
+      <li id="src-7">Indicators of Climate Change in California (2022) – Physical Systems (snow-water content context).</li>
+      <li id="src-8">Indicators of Climate Change in California (2022) – Physical Systems (snowmelt timing context).</li>
+      <li id="src-9">Indicators of Climate Change in California (2022) – Human Health section.</li>
+      <li id="src-10">Indicators of Climate Change in California (2022) – Tribal section (example narrative).</li>
+    </ol>
+
+    <p class="muted">
+      Some sections are statewide context because the indicators are statewide. Orange County operational data is from Orange County agency reports listed above.
+    </p>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>Educational site draft. Content is cited from public-agency reports listed in Sources.</p>
+  </div>
+</footer>
+
+<button id="back-to-top" class="back-to-top" aria-label="Back to top" title="Back to top">↑</button>
+
+<!-- Lightbox overlay (required for click-to-fullscreen image preview) -->
+<div class="lightbox" id="lightbox" aria-hidden="true">
+  <div class="lightbox__frame" role="dialog" aria-modal="true" aria-label="Image preview">
+    <button class="lightbox__close" id="lightboxClose" type="button" aria-label="Close image">×</button>
+    <img class="lightbox__img" id="lightboxImg" alt="" />
+  </div>
+</div>
+
+<script src="js/main.js"></script>
+</body>
+</html>
